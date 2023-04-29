@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -29,7 +30,7 @@ const size = hp("3.5");
 const Verification = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetch("http://18.142.153.136:3000/api/application/member_details?id=223", {
       method: "GET",
@@ -43,12 +44,21 @@ const Verification = () => {
         setData(data);
         console.log(data);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error))
+      .finally(()=>setLoading(false));
   }, []);
+
+  if(loading){
+    return(
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#1D9765" />
+      </View>
+    )
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View >
+      <View>
         <View
           style={{
             flexDirection: "row",
